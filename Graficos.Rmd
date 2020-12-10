@@ -1,0 +1,651 @@
+---
+title: "Clase 3- Un2-Graficos"
+author: "io"
+date: "31/8/2020"
+output: html_document
+---
+
+---
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ADA - Gráficos
+***
+Existen al menos tres sistemas para generar gráficos en R:
+
+* Sistema Base
+* Sistema Lattice
+* GGPlot2 
+
+***
+Al crear gráficos existen dos fases:
+
+* Inicialización de un nuevo gráfico.
+* Anotar un gráfico, agregando propiedades.
+
+
+
+
+
+```{r, echo=FALSE}
+library(datasets)
+data("mtcars")
+```
+
+```{r, echo=FALSE}
+str(mtcars)
+```
+***
+Fuente: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html
+
+Motor Trend Car Road Tests
+
+Description
+
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+
+Usage
+
+mtcars
+Format
+
+A data frame with 32 observations on 11 (numeric) variables.
+
+[, 1]	mpg	Miles/(US) gallon
+[, 2]	cyl	Number of cylinders
+[, 3]	disp	Displacement (cu.in.)
+[, 4]	hp	Gross horsepower
+[, 5]	drat	Rear axle ratio
+[, 6]	wt	Weight (1000 lbs)
+[, 7]	qsec	1/4 mile time
+[, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+[, 9]	am	Transmission (0 = automatic, 1 = manual)
+[,10]	gear	Number of forward gears
+[,11]	carb	Number of carburetors
+Source
+
+Henderson and Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411.
+
+
+***
+```{r, echo=FALSE}
+class(mtcars)
+```
+***
+```{r, echo=FALSE}
+head(mtcars)
+```
+***
+```{r, echo=FALSE}
+mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5), labels=c("3gears","4gears","5gears")) 
+mtcars$am <- factor(mtcars$am,levels=c(0,1), labels=c("Automatic","Manual")) 
+mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8), labels=c("4cyl","6cyl","8cyl")) 
+
+```
+
+```{r, echo=FALSE}
+head(mtcars)
+```
+
+***
+```{r, echo=FALSE}
+summary(mtcars)
+```
+
+
+```{r }
+na_count <-sapply(mtcars, function(y) sum(length(which(is.na(y)))))
+na_count <- data.frame(na_count)
+na_count$name<-rownames(na_count)
+na_count
+
+```
+
+
+***
+```{r, echo=FALSE}
+hist(mtcars$mpg, breaks = 20)
+```
+
+***
+```{r, echo=FALSE}
+qqnorm(mtcars$mpg)
+```
+
+***
+```{r, echo=FALSE}
+hist(mtcars$mpg)
+
+```
+
+***
+```{r, echo=FALSE}
+boxplot(mpg ~ am, data = mtcars, main = "Distribucion")
+```
+
+***
+```{r, echo=FALSE}
+plot(mpg ~ wt, data = mtcars, col = "red")
+```
+***
+```{r, echo=FALSE}
+plot(mpg ~ wt, data = mtcars, col = am)
+
+```
+***
+```{r, echo=FALSE}
+pairs(mtcars)
+```
+
+***
+```{r, echo=FALSE}
+par()              # muestra la configuración actual
+opar <- par()      # hacer una copia de la configuración actual 
+par(col.lab="red") # indicar el color rojo para las etiquetas de x e y 
+hist(mtcars$mpg)   # crear un gráfico con la nueva configuración general 
+par(opar)          # restaurar la configuración original
+```
+
+***
+```{r, echo=FALSE}
+require(datasets)
+x <- stats::rnorm(50)
+opar <- par(bg = "white")
+```
+
+***
+```{r, echo=FALSE}
+plot(mpg ~ wt, data = mtcars, col = am)
+abline(h = 20, col = rgb(1, 0, 1, alpha = 0.90))
+abline(v = 2, col = rgb(0, 0, 1, alpha = 0.90), lwd = 5)
+abline(v = 4, col = rgb(0, 0, 1, alpha = 0.90), lty = "dotted")
+abline(a = 25, b = -2, col = rgb(0, 1, 0, alpha = 0.90))
+
+```
+
+***
+```{r, echo=FALSE}
+hist(mtcars$mpg)  
+abline(h = 10, col = gray(.90))
+abline(h = 2, col = rgb(1, 0, 0, alpha = 0.90))
+```
+***
+```{r, echo=FALSE}
+hist(mtcars$mpg)  
+lines(x, col = "green4", lty = "dotted")
+lines(x + 5, col = "red")
+```
+***
+```{r, echo=FALSE}
+hist(mtcars$mpg)  
+points(x, bg = "limegreen", pch = 21)
+```
+
+
+***
+```{r, echo=FALSE}
+plot(mpg ~ wt, data = mtcars, col = am)
+title(main = "Título principal",
+      sub = "Subtítulo",
+      col.main = "blue", 
+      col.sub = "red",
+      cex.main = 2.2, 
+      cex.sub = 1.0,
+      font.main = 4, 
+      font.sub = 3)
+
+```
+***
+```{r, echo=FALSE}
+par(bg = "gray")
+plot(mpg ~ wt, data = mtcars, col = am)
+
+```
+***
+```{r, echo=FALSE}
+pie(rep(1,24), col = rainbow(24), radius = 0.9) # repite 24 veces el primer vector o valor.
+title(main = "Ejemplo de Rueda de Color", cex.main = 1.4, font.main = 3)
+```
+***
+```{r, echo=FALSE}
+pie.sales <- c(0.10, 0.30, 0.20, 0.15, 0.05, 0.20)
+names(pie.sales) <- c("Limpieza", "Electrónica", "Perecederos", "No Perecederos", "Perfumería", "Otros")
+```
+
+
+```{r, echo=FALSE}
+pie(pie.sales, col = c("purple","violetred1","green3","cornsilk","cyan","white"))
+title(main = "Ventas Totales del Mes", cex.main = 1.8, font.main = 1)
+```
+***
+```{r, echo=FALSE}
+boxplot(mtcars$wt ~ mtcars$am, data = mtcars, col="lavender")
+title(main="Boxplots de wt según tipo de transmisión", xlab="Tipo de Transmisión", font.main=4, font.lab=1)
+
+```
+
+***
+```{r, echo=FALSE}
+par(bg="white")
+n <- 100
+x1 <- seq(0, n)
+y1 <- 30 * x1 + 2
+y2 <- x1 ^ 2 + 2
+xx <- c(0:n, n:0)
+yy <- c(y1, rev(y2))
+plot(xx, yy, type="n", xlab="X", ylab="Distancia")
+polygon(xx, yy, col="gray")
+title("Distancia entre f1 (lineal) y f2 (cuadrática)")
+
+```
+***
+```{r, echo=FALSE}
+x <- c(0.00, 0.40, 0.86, 0.85, 0.69, 0.48, 0.54, 1.09, 1.11, 1.73, 2.05, 2.02)
+par(bg="lightgray")
+plot(x, type="n", axes=FALSE, ann=FALSE)
+usr <- par("usr")
+rect(usr[1], usr[3], usr[2], usr[4], col="cornsilk", border="black")
+lines(x, col="blue")
+points(x, pch=21, bg="lightcyan", cex=1.25)
+axis(2, col.axis="blue", las=1)
+axis(1, at=1:12, lab=month.abb, col.axis="blue")
+box()
+title(main= "The Level of Interest in R", font.main=4, col.main="red")
+title(xlab= "1996", col.lab="red")
+
+
+```
+
+***
+```{r, echo=FALSE}
+par(bg="cornsilk")
+x <- rnorm(1000)
+hist(x, xlim=range(-4, 4, x), breaks = 30, col="lavender", main = "")
+title(main="1000 Observaciones de una Variable Aleatoria Simulada", font.main=3)
+
+```
+
+```{r, echo=FALSE}
+pairs(iris[1:4], main="Edgar Anderson's Iris Data", font.main=4, pch=19)
+```
+
+***
+
+```{r, echo=FALSE}
+pairs(iris[1:4], main="Edgar Anderson's Iris Data", pch=21, bg = c("red", "green3", "blue")[unclass(iris$Species)])
+
+```
+
+***
+
+```{r, echo=FALSE}
+x <- 10*1:nrow(volcano)
+y <- 10*1:ncol(volcano)
+
+lev <- pretty(range(volcano), 10)
+par(bg = "lightcyan")
+
+pin <- par("pin")
+
+xdelta <- diff(range(x))
+
+ydelta <- diff(range(y))
+xscale <- pin[1]/xdelta
+yscale <- pin[2]/ydelta
+scale <- min(xscale, yscale)
+
+xadd <- 0.5*(pin[1]/scale - xdelta)
+yadd <- 0.5*(pin[2]/scale - ydelta)
+plot(numeric(0), numeric(0), xlim = range(x)+c(-1,1)*xadd, ylim = range(y)+c(-1,1)*yadd, type = "n", ann = FALSE)
+
+usr <- par("usr")
+rect(usr[1], usr[3], usr[2], usr[4], col="green3")
+contour(x, y, volcano, levels = lev, col="yellow", lty="solid", add=TRUE)
+box()
+title("A Topographic Map of Maunga Whau", font= 4)
+title(xlab = "Meters North", ylab = "Meters West", font= 3)
+mtext("10 Meter Contour Spacing", side=3, line=0.35, outer=FALSE, at = mean(par("usr")[1:2]), cex=0.7, font=3)
+
+
+```
+
+***
+
+```{r, echo=FALSE}
+M <- matrix(sample(1:30, 5*7, replace = TRUE), nrow = 5, ncol=7)
+heatmap(M, Rowv = NA, Colv = NA)
+```
+***
+
+```{r, echo=FALSE}
+par(bg="white")
+coplot(mpg ~ wt | am, data = mtcars, pch = 21, bg = "green3")
+```
+
+***
+
+```{r, echo=FALSE}
+coplot(mpg ~ wt | am * cyl, data = mtcars, pch = 21, bg = "green3")
+```
+
+***
+
+```{r, echo=FALSE}
+
+```
+
+***
+
+```{r, echo=FALSE}
+#install.packages("ggplot2")
+library(ggplot2)
+```
+
+***
+## Gráficos con GGPLOT2
+
+Implementa la gramática de los gráficos.
+
+qplot(x, y, data=, color=, shape=, size=, alpha=, geom=, method=, formula=, facets=, xlim=, ylim= xlab=, ylab=, main=, sub=)
+
+
+* alpha: Transparencia Alpha para superponer elementos, expresado como una fracción entre 0 (transparencia completa y 1 (opacidad total).
+
+* color, shape, size, fill:	Asocia a los niveles de variables con el color, forma o tamaño del símbolo. Para density y boxplots, fill asocia el color de llenado con una variable. Las leyendas (legeds) se dibujan automáticamente.
+
+* data: especifica el data frame.
+
+* facets: Crea un gráfico de rejilla (trellis graph)  al especificar las variables que determinan. Este valor debe expresarse como rowvar ~ colvar. Para crear graficos de rejilla basados en una única variable condicional, usar rowvar~.	o .~colvar  
+
+* geom:	Especifica la geometría de los objetos que definen el tipo de gráfico. La opción geom es expresada como un vector de strings con una o mas entradas. Los valores de geom incluyen: "point", "smooth", "boxplot", "line", "histogram", "density", "bar", and "jitter".
+
+* main: vector de strings que especifica el título y subtítulo.
+
+* method: formula a utilizar si geom="smooth", la línea de ajuste y límites de confianza se agregan por defecto. Cuando el número de observaciones es mayor que 1.000, se utiliza el algoritmo mas eficiente. Methods incluye: "lm" para regressión, "gam" para modelos aditivos generalizados y "rlm" para regresiones robustas ("robust regression"). El parámetro formula da la forma del ajuste. 
+Por ejemplo, para agregar las líneas de regresión lineal simple, deberías especificar 'geom="smooth", method="lm", formula=y~x' . Cambiando la fórmula por 'y~poly(x,2)' produciría un ajuste cuadrático. Nota que la fórmula usa las letras x e y, no los nombres de las variables.
+Para method="gam", asegurate de cargar el paquete mgcv. Para method="rml", cargar el paquete MASS.
+
+* x, y: Especifican las variables ubicadas sobre los ejes horizontal y vertical. Para gráficos univariados (como histogramas), omitir y.
+
+* xlab, ylab: Vector de strings que especifica las etiquetas de los ejes horizontal y vertical.
+
+* xlim, ylim: Vectores numéricos de dos elementos que dan los valores mínimo y máximo para los ejes horizontal y vertical respectivamente.
+
+Notas:
+Actualmente, ggplot2 no puede ser usado para crear gráficos 3D o de mosaico.
+Usar I(valor) para indicar un valor específico. Por ejemplo size=z hace que el tamaño del punto dibujado o línea sea proporcional a el valor de la variable z. Por otro lado, size=I(3) especifica que cada punto o línea a tres veces el tamaño por defecto.
+
+
+Referencia de ggplot2: https://ggplot2.tidyverse.org/reference/
+
+
+```{r, echo=FALSE}
+# Gráfico de kernels de densidad para mpg
+# agrupados por el número de marchas "gears" (indicadas por color)
+qplot(mpg, data=mtcars, geom="density", fill=gear, alpha=I(.5), 
+   main="Distribution of Gas Milage", xlab="Millas por Galon", 
+   ylab="Densidad")
+
+```
+
+***
+```{r, echo=FALSE}
+# Dispersión de mpg vs weight, separada por número de cilindros
+qplot(wt, mpg, data=mtcars, geom="point", 
+   color=cyl, 
+   main="Dispersion de MPG respecto a Weight", 
+   xlab="Weight", ylab="Miles per Gallon (MPG)")
+```
+***
+```{r, echo=FALSE}
+# Regresión de mpg respecto a weight 
+qplot(wt, mpg, data=mtcars, geom="smooth", 
+   method="lm", formula=y~x, 
+   main="Regresion de mpg respecto a weight ", 
+   xlab="Weight", ylab="Miles per Gallon")
+```
+
+
+
+***
+```{r, echo=FALSE}
+# Regresiones de mpg respecto a weight separadas por número de cilindros
+qplot(wt, mpg, data=mtcars, geom="smooth", 
+   method="lm", formula=y~x, color=cyl, 
+   main="Regresiones de MPG vs Weight", 
+   xlab="Weight", ylab="Miles per Gallon")
+```
+
+
+
+***
+```{r, echo=FALSE}
+qplot(wt, mpg, data=mtcars, geom=c("point", "smooth"), 
+   method="lm", formula=y~x, color=cyl, 
+   main="Regresion de MPG vs Weight", 
+   xlab="Weight", ylab="Miles per Gallon")
+
+```
+
+
+***
+
+Boxplots de mpg por número de marchas (gears).
+Las observaciones serán superpuestas y movidas (jittered).
+
+```{r, echo=FALSE}
+qplot(gear, mpg, data=mtcars, geom=c("jitter"), 
+   fill=gear, main="MPG por marchas (Gear)",
+   xlab="", ylab="Miles per Gallon")
+
+
+```
+
+***
+```{r, echo=FALSE}
+qplot(gear, mpg, data=mtcars, geom=c("jitter"), 
+   fill=gear, main="MPG por marchas (Gear)",
+   xlab="", ylab="Miles per Gallon")
+
+
+```
+***
+```{r, echo=FALSE}
+qplot(gear, mpg, data=mtcars, geom=c("boxplot", "jitter"), 
+   fill=gear, main="MPG por marchas (Gear)",
+   xlab="", ylab="Miles per Gallon")
+
+```
+***
+Scatterplot de mpg vs hp. El tipo de transmisión es representado por la forma y el color.
+
+```{r, echo=FALSE}
+qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   size=I(3),
+   xlab="Horsepower", ylab="Miles per Gallon")
+
+```
+
+Scatterplot de mpg vs hp para cada combinación de marchas (gears) y cilindros
+en cada facet. El tipo de transmisión es representado por la forma y el color.
+
+```{r, echo=FALSE}
+qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   facets=gear~cyl, size=I(3),
+   xlab="Horsepower", ylab="Miles per Gallon")
+
+```
+
+
+***
+```{r, echo=FALSE}
+p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   facets=gear~cyl, main="Scatterplots de MPG vs Horsepower",
+   xlab="Horsepower", ylab="Miles per Gallon")
+
+```
+***
+```{r, echo=FALSE}
+p
+```
+***
+```{r, echo=FALSE}
+p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   facets=gear~cyl, main="Scatterplots de MPG vs Horsepower",
+   xlab="Horsepower", ylab="Miles per Gallon")
+
+# Fondo blanco y lineas negras en la grilla.
+p + theme_bw()
+
+```
+***
+```{r, echo=FALSE}
+# Cambios en la letra y ubicación de la etiqueta
+p + theme(axis.title=element_text(face="bold.italic", 
+   size="12", color="brown"), legend.position="top")
+
+```
+***
+```{r, echo=FALSE}
+p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   facets=gear~cyl, main="Scatterplots de MPG vs Horsepower",
+   xlab="Horsepower", ylab="Miles per Gallon")
+
+# Fondo blanco y lineas negras en la grilla.
+p + theme_bw()
+
+# Cambios en la letra y ubicación de la etiqueta
+p + theme(axis.title=element_text(face="bold.italic", 
+   size="12", color="brown"), legend.position="top")
+
+```
+
+
+***
+Un poco mas sobre gramática de los graficos y ggplot.
+
+Referencia: https://ggplot2.tidyverse.org/reference/#section-layer-geoms
+
+ggplot(): Inicializa el objeto ggplot
+
+aes(): Genera aesthetic que decribe como se mapean las variables de los datos en las propiedades visuales de los geoms.
+
+geom_point(): El punto geom que es usado al crear scatterplots.
+
+geom_line: Conecta las observaciones ordenadas por la variable del eje x.
+
+scale_x_log10(): Funciones de transformación útiles al indicar las escalas.
+
+scale_size_continuous(): 
+
+facet_wrap():
+
+scale_fill_manual():
+
+xlab():
+
+ylab():
+
+ggtitle():
+
+theme():
+
+***
+```{r, echo=FALSE}
+p <- ggplot(mtcars, aes(wt, mpg))
+p + geom_point()
+```
+***
+```{r, echo=FALSE}
+p + geom_point(aes(colour = factor(cyl)))
+```
+***
+```{r, echo=FALSE}
+p + geom_point(aes(shape = factor(cyl)))
+```
+***
+```{r, echo=FALSE}
+p + geom_point(aes(size = qsec))
+```
+***
+```{r, echo=FALSE}
+ggplot(mtcars, aes(wt, mpg)) + geom_point(colour = "red", size = 3)
+```
+***
+```{r, echo=FALSE}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(shape = 21, colour = "black", fill = "white", size = 5, stroke = 5)
+```
+***
+```{r, echo=FALSE}
+p <- ggplot(mtcars, aes(mpg, wt, shape = factor(cyl)))
+p + geom_point(aes(colour = factor(cyl)), size = 4) +
+  geom_point(colour = "grey90", size = 1.5)
+```
+***
+```{r, echo=FALSE}
+p + geom_point(colour = "black", size = 4.5, show.legend = TRUE) +
+  geom_point(colour = "pink", size = 4, show.legend = TRUE) +
+  geom_point(aes(shape = factor(cyl)))
+```
+
+***
+```{r, echo=FALSE}
+d <- ggplot(mtcars, aes(gear, cyl)) 
+d + geom_bin2d()
+
+```
+
+***
+```{r, echo=FALSE}
+d <- ggplot(mtcars, aes(gear, mpg)) 
+d + geom_bin2d()
+
+```
+***
+```{r, echo=FALSE}
+d <- ggplot(mtcars, aes(mpg, wt)) 
+d + geom_bin2d(bins = c(5,5))
+```
+***
+Número de autos en cada clase:
+
+```{r, echo=FALSE}
+g <- ggplot(mtcars, aes(cyl))
+g + geom_bar()
+
+```
+
+***
+```{r, echo=FALSE}
+g + geom_bar(aes(fill = am))
+
+```
+***
+```{r, echo=FALSE}
+g + geom_bar(aes(fill = am), position = position_stack(reverse = TRUE)) +
+ coord_flip() +
+ theme(legend.position = "top")
+
+```
+***
+```{r, echo=FALSE}
+library(dplyr)
+cars <- mtcars %>%
+select(cyl, mpg, hp, qsec) %>%
+group_by(cyl) %>%
+summarise(mpg = mean(mpg), hp = mean(hp), qsec = mean(qsec), instances = n())
+cars
+```
+***
+
+```{r, echo=FALSE}
+p <- ggplot(mtcars, aes(mpg, wt))
+p <- p + geom_point(aes(color = am, shape = am))
+p <- p + facet_grid(cyl~.)
+p
+```

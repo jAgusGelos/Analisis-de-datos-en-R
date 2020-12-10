@@ -1,0 +1,110 @@
+1- Crear un vector que contenga una secuencia del 0 al 50, contando de dos en dos. A
+dicho vector asignarlo a la variable v1.
+
+v1<-seq(0,50, by=2) 
+
+#¿Cuál es la longitud del vector v1? 26 ¿Cuál es el tipo de dato del vector v1? "numeric"
+length(v1) - 26
+class(v1)  - "numeric"
+
+Crear tres nuevos vectores: 
+
+v2: que contenga las posiciones 5, 8, 12 y 15 del vector v1
+v2<-v1[c(5,8,12,15)]
+
+v3: que contenga las posiciones 4, 9, 16, 25 del vector v1
+v3<-v1[c(4,9,16,25)]
+
+v4: que contenga las posiciones 10, 12, 18, 31 del vector v1 coercionados
+explícitamente al tipo de datos logical. ¿Con que datos se completará el vector? logical
+v4<- as.logical(v1[c(10,12,18,31)])
+
+
+Crear una matriz (m1) formada por los vectores v2 y v3 como columnas de la misma
+m1 <- cbind(v2,v3) 
+
+Crear una matriz (m2) formada por los vectores v2 y v3 como filas de la misma
+m2 <- rbind(v3,v4)
+
+Realizar las siguientes acciones con la matriz m1 obtenida en el punto 5:
+
+Asignarles nombres a las columnas de la matriz m1 (col1 y col2)
+colnames(m1) <- c("col1","col2")
+
+Asignarles nombres a las filas de la matriz m1 (fil1, fil2, fil3, fil4)
+rownames(m1)<- c("fill1","fill2","fill3","fill4")
+
+Multiplicar la matriz m1 por su traspuesta
+m <- m1%*% t(m1)
+
+
+Realizar las siguientes acciones:
+Crear una matriz vacía de 4 filas y 3 columnas (m3)
+m3<-matrix(nrow=4,ncol=3)
+Consultar los datos de la matriz, ¿qué datos contiene? 
+m3 - Null
+
+Asignarles la secuencia de números del 1 al 3. ¿Qué sucede en este caso?
+m3[,]=c(1,2,3)
+m3 La primera fila y columna contienen 123, el resto de numeros está mezclado.
+
+Crear un vector que contenga la columna 1 de la matriz m3.
+v<-m3[,1]
+
+Crear un vector vacío de tipo numérico (racional) de longitud 10.
+vec<-vector(mode="numeric",length = 10)
+
+Asignarle un conjunto de 10 números enteros aleatorios distribuidos uniformemente y comprendidos entre 0-100
+vec<-sample(0:100,10)
+
+A todos los componentes del vector sumarles 2. ¿Cómo se realizaría esto?
+vec <- vec + 2
+
+Crear un nuevo vector que se obtenga de la división del vector del punto b por 0 (cero). 
+¿Con que datos quedaría el vector en este caso?
+new_vec<-vec/0
+El vector queda con datos INF
+
+Cree una lista (lis1) que contenga al menos un elemento de cada una de las siguientes clases: Caracter - Lógico - Numérico
+lis1<-c("A",T,5)
+
+Cree un vector con el primer y tercer elemento de la lista. ¿Es posible realizar esto? Si
+¿En caso de ser posible, a que clase de datos correspondería dicho vector? 
+vec4 <- c(lis1[1],lis1[3])
+class(vec4) - "character"
+
+
+Cree una función con las siguientes características:
+Debe recibir 3 parámetros (a, b y c)
+Los parámetros a y c deben tener como valor por defecto 5 y 3 respectivamente
+En caso que el valor de c sea mayor 3 se debe realizar la siguiente operación: a*b*c
+En caso que el valor de c sea menor o igual a 3 debe realizar los siguiente: a+b*c
+func <- function(a=5,b,c=3){
+  if(c>3){
+    a*b*c
+  }else{
+    a+b*c
+  }
+}
+
+Cree una función que genere números aleatorios, distribuidos normalmente con media, desviación estándar
+y cantidad de observaciones recibidas por parámetro. NOTA: La función debe generar siempre la misma secuencia
+de números aleatorios.
+
+aleatoria <- function(media,desv,cant){
+  
+  vec = c(1:cant)
+  vec2 = vec / cant
+  for (i in vec2){
+    n1 = (sqrt(-2*log(vec2[i]))*cos(2*pi*vec2[i])) * desv + media
+    n2 = (sqrt(-2*log(vec2[i]))*sin(2*pi*vec2[i])) * desv + media
+    if (i%/%2 == 0){
+      vec[i] = n1
+    } else{
+      vec[i]=n2
+    }
+  }
+  vec
+}
+
+aleatoria(0.5,1,10)
